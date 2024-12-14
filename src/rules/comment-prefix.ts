@@ -1,11 +1,5 @@
 import { Rule } from "eslint";
 
-interface Options {
-  lineRules: string[];
-  lineIgnoreRules: string[];
-  blockRules: string[];
-  blockIgnoreRules: string[];
-}
 const eslintCommentRules = [
   /^eslint-disable/,
   /^eslint-enable/,
@@ -31,12 +25,13 @@ const defaultLineRules = [
   `^FIXME${ticketPrefix}:`, // FIXME: 既知のバグが見つかっている箇所.チケットなどと紐づけたい. 例: FIXME[BUG-123]: {バグの説明}
 ];
 
-const defaultOptions: Options = {
+const defaultOptions = {
   lineRules: defaultLineRules,
   lineIgnoreRules: [],
   blockRules: [],
   blockIgnoreRules: [],
 };
+type Options = typeof defaultOptions;
 
 const properties = {
   lineRules: {

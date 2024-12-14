@@ -1,9 +1,8 @@
 import { Rule } from "eslint";
-import { AST } from "eslint";
 
 interface Options {
-  lineRules: string[]; // Line コメントの正規表現
-  blockRules: string[]; // Block コメントの正規表現
+  lineRules: string[];
+  blockRules: string[];
 }
 
 const defaultOptions: Options = {
@@ -52,10 +51,8 @@ const rule: Rule.RuleModule = {
   },
 
   create(context) {
-    // ユーザ設定を取得し、デフォルトを補完
     const options: Options = { ...defaultOptions, ...(context.options[0] || {}) };
 
-    // ルール用の正規表現を生成
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
     const blockRegexes = options.blockRules.map((rule) => new RegExp(rule));
 
@@ -65,16 +62,13 @@ const rule: Rule.RuleModule = {
         const comments = sourceCode.getAllComments();
 
         comments.forEach((comment) => {
-          // 無視するコメントをスキップ
           if (eslintCommentPatters.some((regex) => regex.test(comment.value))) return;
           if (tsCommentPatterns.some((regex) => regex.test(comment.value))) return;
 
-          // loc が null または undefined の場合はスキップ
           if (comment.loc == null) return;
           const commentValue = comment.value.trim();
 
           if (comment.type === "Line") {
-            // Line コメントに対するルール
             const isValid = lineRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {
               context.report({
@@ -83,7 +77,6 @@ const rule: Rule.RuleModule = {
               });
             }
           } else if (comment.type === "Block") {
-            // Block コメントに対するルール
             const isValid = blockRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {
               context.report({

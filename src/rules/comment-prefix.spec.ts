@@ -6,28 +6,104 @@ describe("コメントルールのテスト", () => {
   const ruleTester = new RuleTester({
     languageOptions: { ecmaVersion: 2020, sourceType: "module" },
   });
+  
+    it("TODO, FIXME 形式のコメントがエラーにならない", () => {
+      ruleTester.run("comment-prefix", rule, {
+        valid: [
+          {
+            code: "// TODO[TASK-123]: これを実装する",
+            filename: "test-file.js",
+          },
+          {
+            code: "// FIXME[BUG-456]: 修正する必要がある",
+            filename: "test-file.ts",
+          },
+        ],
+        invalid: [],
+      });
+    });
+  
+    it("NOTE, WIP, HACK のコメントがエラーにならない", () => {
+      ruleTester.run("comment-prefix", rule, {
+        valid: [
+          {
+            code: "// NOTE: 実装に関する説明",
+            filename: "test-file.jsx",
+          },
+          {
+            code: "// WIP: 未実装部分",
+            filename: "test-file.tsx",
+          },
+          {
+            code: "// HACK: 後でリファクタリング",
+            filename: "test-file.mjs",
+          },
+        ],
+        invalid: [],
+      });
+    });
+  
+    it("無視されるコメントがエラーにならない", () => {
+      ruleTester.run("comment-prefix", rule, {
+        valid: [
+          {
+            code: "// eslint-disable",
+            filename: "test-file.js",
+          },
+          {
+            code: "// ts-ignore",
+            filename: "test-file.ts",
+          },
+          {
+            code: "// @biome-disable-next-line",
+            filename: "test-file.tsx",
+          },
+        ],
+        invalid: [],
+      });
+    });
+  
+    it("ブロックコメントがエラーにならない", () => {
+      ruleTester.run("comment-prefix", rule, {
+        valid: [
+          {
+            code: "/** ブロックコメント */",
+            filename: "test-file.js",
+          },
+          {
+            code: `/*
+              複数行コメントも許可
+            */`,
+            filename: "test-file.jsx",
+          },
+        ],
+        invalid: [],
+      });
+    });
 
-  it("正しいコメントにはエラーが発生しない", () => {
+  it("ルールにマッチしないコメントにはエラーが発生する", () => {
     ruleTester.run("comment-prefix", rule, {
-      valid: [
-        // 行コメントの例
-        "// TODO[TASK-123]: これを実装する",
-        "// FIXME[BUG-456]: 修正する必要がある",
-        "// NOTE: 実装に関する説明",
-        "// WIP: 未実装部分",
-        "// HACK: 後でリファクタリング",
-
-        // 無視されるコメントの例
-        "// eslint-disable",
-        "// ts-ignore",
-        "// @biome-disable-next-line",
-
-        // ブロックコメントの例
-        `/*
-          NOTE: 複数行コメントも許可
-        */`,
+      valid: [],
+      invalid: [
+        {
+          code: "// 間違ったコメント",
+          filename: "test.ts",
+          errors: [
+            {
+              message: 'Line comment "間違ったコメント" does not match any of the user-defined line rules.',
+            },
+          ],
+        },
+        {
+          code: "// TODO: チケット番号が不足",
+          filename: "test.ts",
+          errors: [
+            {
+              message: 'Line comment "TODO: チケット番号が不足" does not match any of the user-defined line rules.',
+            },
+          ],
+        },
       ],
-      invalid: [],
     });
   });
 });

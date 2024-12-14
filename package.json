@@ -1,18 +1,27 @@
 {
   "name": "eslint-code-comments-rule",
   "version": "0.0.1",
+  "type": "module",
   "description": "Custom eslint rules for enforce code comments",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
-  "keywords": ["eslint", "eslint-plugin", "eslint-rule", "eslint-comment", "eslint-rule-comment"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "eslint-rule",
+    "eslint-comment",
+    "eslint-rule-comment"
+  ],
   "author": "hi_mochy",
   "license": "ISC",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/eslint": "^9.6.1",
@@ -20,15 +29,20 @@
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "eslint": "^9.17.0",
-    "typescript": "^5.7.2"
+    "eslint-plugin-testing-library": "^7.1.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "micromatch": "^4.0.8"
   },
   "eslintConfig": {
-    "plugins": ["custom"],
+    "plugins": [
+      "custom"
+    ],
     "rules": {
       "code-comments-rule": "error"
     }
-  }
+  },
+  "packageManager": "pnpm@9.12.0+sha512.4abf725084d7bcbafbd728bfc7bee61f2f791f977fd87542b3579dcb23504d170d46337945e4c66485cd12d588a0c0e570ed9c477e7ccdd8507cf05f3f92eaca"
 }

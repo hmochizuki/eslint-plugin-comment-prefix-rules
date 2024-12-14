@@ -2,11 +2,11 @@ import { Rule } from "eslint";
 
 interface Options {
   lineRules: string[];
-  lineIgnorePatterns: string[];
+  lineIgnoreRules: string[];
   blockRules: string[];
   blockIgnorePatterns: string[];
 }
-const eslintCommentPatters = [
+const eslintCommentRules = [
   /^eslint-disable/,
   /^eslint-enable/,
   /^eslint-disable-line/,
@@ -33,7 +33,7 @@ const defaultLineRules = [
 
 const defaultOptions: Options = {
   lineRules: defaultLineRules,
-  lineIgnorePatterns: [],
+  lineIgnoreRules: [],
   blockRules: [],
   blockIgnorePatterns: [],
 };
@@ -71,7 +71,7 @@ const rule: Rule.RuleModule = {
     const options: Options = { ...defaultOptions, ...(context.options[0] || {}) };
     
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
-    const lineIgnoreRegexes = options.lineIgnorePatterns.map((rule) => new RegExp(rule));
+    const lineIgnoreRegexes = options.lineIgnoreRules.map((rule) => new RegExp(rule));
     const blockRegexes = options.blockRules.map((rule) => new RegExp(rule));
     const blockIgnoreRegexes = options.blockIgnorePatterns.map((rule) => new RegExp(rule));
     return {
@@ -82,7 +82,7 @@ const rule: Rule.RuleModule = {
         comments.forEach((comment) => {
           if (comment.loc == null) return;
           const commentValue = comment.value.trim();
-          if (eslintCommentPatters.some((regex) => regex.test(commentValue))) return;
+          if (eslintCommentRules.some((regex) => regex.test(commentValue))) return;
           if (tsCommentPatterns.some((regex) => regex.test(commentValue))) return;
           if (biomeCommentPatterns.some((regex) => regex.test(commentValue))) return;
 

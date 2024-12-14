@@ -52,21 +52,20 @@ const rule: Rule.RuleModule = {
 
   create(context) {
     const options: Options = { ...defaultOptions, ...(context.options[0] || {}) };
-
+    
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
     const blockRegexes = options.blockRules.map((rule) => new RegExp(rule));
-
+    
     return {
       Program() {
         const sourceCode = context.sourceCode;
         const comments = sourceCode.getAllComments();
-
+        
         comments.forEach((comment) => {
-          if (eslintCommentPatters.some((regex) => regex.test(comment.value))) return;
-          if (tsCommentPatterns.some((regex) => regex.test(comment.value))) return;
-
           if (comment.loc == null) return;
           const commentValue = comment.value.trim();
+          if (eslintCommentPatters.some((regex) => regex.test(commentValue))) return;
+          if (tsCommentPatterns.some((regex) => regex.test(commentValue))) return;
 
           if (comment.type === "Line") {
             const isValid = lineRegexes.some((regex) => regex.test(commentValue));

@@ -1,5 +1,6 @@
 import { Rule } from "eslint";
 import micromatch from "micromatch";
+import { getInvalidMessage } from "./getInvalidMessage";
 
 const eslintCommentRules = [
   /^eslint-disable/,
@@ -116,7 +117,7 @@ const rule: Rule.RuleModule = {
             if(lineRegexes.some((regex) => regex.test(commentValue))) return;
             context.report({
               loc: comment.loc,
-              message: `Line comment "${commentValue}" does not match any of the user-defined line rules.`
+              message: getInvalidMessage(comment.type, commentValue)
             });
           } else if (comment.type === "Block") {
             if(blockRegexes.length === 0) return;
@@ -124,7 +125,7 @@ const rule: Rule.RuleModule = {
             if(blockRegexes.some((regex) => regex.test(commentValue))) return;
             context.report({
               loc: comment.loc,
-              message: `Block comment "${commentValue}" does not match any of the user-defined block rules.`
+              message: getInvalidMessage(comment.type, commentValue)
             });
           }
         });

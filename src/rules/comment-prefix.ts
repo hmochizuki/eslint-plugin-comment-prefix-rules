@@ -16,7 +16,7 @@ const biomeCommentPatterns = [
   /^@biome-disable$/,
   /^@biome-disable-next-line$/,
 ];
-const ticketPrefix = "\[[a-zA-Z0-9]{2,5}-\d+\]"
+const ticketPrefix = "\\[[a-zA-Z0-9]{2,5}-\\d+\\]"
 const defaultLineRules = [
   "^MEMO:", // NOTE: 仕様に関するコメント. 例: こういう理由でこういう降るまいにしている.
   "^NOTE:", // NOTE: 実装に関するコメント. 例: こういう理由でこういう実装にしている.
@@ -111,6 +111,7 @@ const rule: Rule.RuleModule = {
           if (biomeCommentPatterns.some((regex) => regex.test(commentValue))) return;
 
           if (comment.type === "Line") {
+            if(lineRegexes.length === 0) return;
             if(lineIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
             const isValid = lineRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {
@@ -120,6 +121,7 @@ const rule: Rule.RuleModule = {
               });
             }
           } else if (comment.type === "Block") {
+            if(blockRegexes.length === 0) return;
             if(blockIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
             const isValid = blockRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {

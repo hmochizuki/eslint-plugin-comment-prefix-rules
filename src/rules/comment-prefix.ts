@@ -4,7 +4,7 @@ interface Options {
   lineRules: string[];
   lineIgnoreRules: string[];
   blockRules: string[];
-  blockIgnorePatterns: string[];
+  blockIgnoreRules: string[];
 }
 const eslintCommentRules = [
   /^eslint-disable/,
@@ -35,7 +35,7 @@ const defaultOptions: Options = {
   lineRules: defaultLineRules,
   lineIgnoreRules: [],
   blockRules: [],
-  blockIgnorePatterns: [],
+  blockIgnoreRules: [],
 };
 
 const properties = {
@@ -59,11 +59,6 @@ const properties = {
     items: { type: "string" },
     minItems: 1
   },
-  blockIgnorePatterns: {
-    type: "array",
-    items: { type: "string" },
-    minItems: 1,
-  }
 } as const satisfies Record<keyof typeof defaultOptions, unknown>
 
 const rule: Rule.RuleModule = {
@@ -89,7 +84,7 @@ const rule: Rule.RuleModule = {
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
     const lineIgnoreRegexes = options.lineIgnoreRules.map((rule) => new RegExp(rule));
     const blockRegexes = options.blockRules.map((rule) => new RegExp(rule));
-    const blockIgnoreRegexes = options.blockIgnorePatterns.map((rule) => new RegExp(rule));
+    const blockIgnoreRegexes = options.blockIgnoreRules.map((rule) => new RegExp(rule));
     return {
       Program() {
         const sourceCode = context.sourceCode;

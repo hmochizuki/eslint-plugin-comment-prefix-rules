@@ -1,1 +1,1 @@
-{"version":3,"file":"comment-prefix.d.ts","sourceRoot":"","sources":["../../src/rules/comment-prefix.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,MAAM,QAAQ,CAAC;AAuE9B,QAAA,MAAM,IAAI,EAAE,IAAI,CAAC,UAgEhB,CAAC;AAEF,eAAe,IAAI,CAAC"}
+{"version":3,"file":"comment-prefix.d.ts","sourceRoot":"","sources":["../../src/rules/comment-prefix.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,MAAM,QAAQ,CAAC;AAwE9B,QAAA,MAAM,IAAI,EAAE,IAAI,CAAC,UA8DhB,CAAC;AAEF,eAAe,IAAI,CAAC"}

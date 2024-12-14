@@ -2,31 +2,33 @@ import { Rule } from "eslint";
 
 interface Options {
   lineRules: string[];
+  lineIgnorePatterns: string[];
   blockRules: string[];
+  blockIgnorePatterns: string[];
 }
-
-const defaultOptions: Options = {
-  lineRules: ["^TODO\\[PROJ-\\d+\\]:", "^FIXME\\[BUG-\\d+\\]:"],
-  blockRules: []
-};
-
 const eslintCommentPatters = [
   /^eslint-disable/,
   /^eslint-enable/,
   /^eslint-disable-line/,
   /^eslint-disable-next-line/,
 ];
-
 const tsCommentPatterns = [
   /^ts-ignore/,
   /^ts-expect-error/,
 ];
-
 const biomeCommentPatterns = [
   /^@biome-ignore$/,
   /^@biome-disable$/,
   /^@biome-disable-next-line$/,
 ];
+
+const defaultOptions: Options = {
+  lineRules: ["^TODO\\[PROJ-\\d+\\]:", "^FIXME\\[BUG-\\d+\\]:"],
+  lineIgnorePatterns: [],
+  blockRules: [],
+  blockIgnorePatterns: [],
+};
+
 
 const rule: Rule.RuleModule = {
   meta: {
@@ -60,8 +62,9 @@ const rule: Rule.RuleModule = {
     const options: Options = { ...defaultOptions, ...(context.options[0] || {}) };
     
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
+    const lineIgnoreRegexes = options.lineIgnorePatterns.map((rule) => new RegExp(rule));
     const blockRegexes = options.blockRules.map((rule) => new RegExp(rule));
-    
+    const blockIgnoreRegexes = options.blockIgnorePatterns.map((rule) => new RegExp(rule));
     return {
       Program() {
         const sourceCode = context.sourceCode;
@@ -75,6 +78,7 @@ const rule: Rule.RuleModule = {
           if (biomeCommentPatterns.some((regex) => regex.test(commentValue))) return;
 
           if (comment.type === "Line") {
+            if(lineIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
             const isValid = lineRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {
               context.report({
@@ -83,6 +87,7 @@ const rule: Rule.RuleModule = {
               });
             }
           } else if (comment.type === "Block") {
+            if(blockIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
             const isValid = blockRegexes.some((regex) => regex.test(commentValue));
             if (!isValid) {
               context.report({

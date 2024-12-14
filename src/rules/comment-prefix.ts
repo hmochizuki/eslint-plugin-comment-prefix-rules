@@ -11,6 +11,18 @@ const defaultOptions: Options = {
   blockRules: []
 };
 
+const eslintCommentPatters = [
+  /^eslint-disable/,
+  /^eslint-enable/,
+  /^eslint-disable-line/,
+  /^eslint-disable-next-line/,
+];
+
+const tsCommentPatterns = [
+  /^ts-ignore/,
+  /^ts-expect-error/,
+];
+
 const rule: Rule.RuleModule = {
   meta: {
     type: "layout",
@@ -53,6 +65,10 @@ const rule: Rule.RuleModule = {
         const comments = sourceCode.getAllComments();
 
         comments.forEach((comment) => {
+          // 無視するコメントをスキップ
+          if (eslintCommentPatters.some((regex) => regex.test(comment.value))) return;
+          if (tsCommentPatterns.some((regex) => regex.test(comment.value))) return;
+
           // loc が null または undefined の場合はスキップ
           if (comment.loc == null) return;
           const commentValue = comment.value.trim();

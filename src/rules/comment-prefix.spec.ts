@@ -3,6 +3,16 @@ import { RuleTester } from "eslint";
 import rule from "./comment-prefix";
 import { getInvalidMessage } from "./getInvalidMessage";
 
+const trimCommentPrefix = (comment: string): string => {
+  if (comment.startsWith("// ")) {
+    return comment.slice(3).trim();
+  }
+  if (comment.startsWith("/*")) {
+    return comment.replace(/^\/\*\s*/, "").replace(/\s*\*\/$/, "").trim();
+  }
+  return comment.trim();
+}
+
 describe("code-comments-rule", () => {
   const ruleTester = new RuleTester({
     languageOptions: { ecmaVersion: 2020, sourceType: "module" },
@@ -46,7 +56,7 @@ describe("code-comments-rule", () => {
           filename: "test.ts",
           errors: [
             {
-              message: getInvalidMessage("Line", comment),
+              message: getInvalidMessage("Line", trimCommentPrefix(comment)),
             },
           ],
         })),
@@ -56,30 +66,33 @@ describe("code-comments-rule", () => {
 
   describe("ユーザーオプションによるカスタマイズされたルールのテスト", () => {
     it("カスタム lineRules が正しく適用される", () => {
+      const customRule = "^CUSTOM\\[[A-Z]{3}-\\d+\\]:"
+      const customValidComment = "// CUSTOM[ABC-123]: カスタムルールにマッチ";
+      const customInvalidComment = "// INVALID: このコメントはカスタムルールにマッチしない";
       ruleTester.run("comment-prefix", rule, {
         valid: [
           {
-            code: "// CUSTOM[ABC-123]: カスタムルールにマッチ",
+            code: customValidComment,
             filename: "custom-file.js",
             options: [
               {
-                lineRules: ["^CUSTOM\\[[A-Z]{3}-\\d+\\]:"], // ユーザー定義のルール
+                lineRules: [customRule],
               },
             ],
           },
         ],
         invalid: [
           {
-            code: "// INVALID: このコメントはカスタムルールにマッチしない",
+            code: customInvalidComment,
             filename: "custom-file.js",
             options: [
               {
-                lineRules: ["^CUSTOM\\[[A-Z]{3}-\\d+\\]:"], // ユーザー定義のルール
+                lineRules: [customRule],
               },
             ],
             errors: [
               {
-                message: 'Line comment "INVALID: このコメントはカスタムルールにマッチしない" does not match any of the user-defined line rules.',
+                message: getInvalidMessage("Line", trimCommentPrefix(customInvalidComment)),
                 line: 1,
                 column: 1,
               },
@@ -90,30 +103,34 @@ describe("code-comments-rule", () => {
     });
   
     it("カスタム blockRules が正しく適用される", () => {
+      const customRule = "^BLOCK\\[\\d+\\]: .*"
+      const customValidBlockComment = "/* BLOCK[456]: カスタムルールにマッチ */";
+      const customInvalidBlockComment = "/* 不正なブロックコメント */";
+
       ruleTester.run("comment-prefix", rule, {
         valid: [
           {
-            code: "/* BLOCK[456]: カスタムルールにマッチ */",
+            code: customValidBlockComment,
             filename: "block-file.js",
             options: [
               {
-                blockRules: ["^BLOCK\\[\\d+\\]: .*"], // ユーザー定義のブロックルール
+                blockRules: [customRule],
               },
             ],
           },
         ],
         invalid: [
           {
-            code: "/* 不正なブロックコメント */",
+            code: customInvalidBlockComment,
             filename: "block-file.js",
             options: [
               {
-                blockRules: ["^BLOCK\\[\\d+\\]: .*"], // ユーザー定義のブロックルール
+                blockRules: [customRule],
               },
             ],
             errors: [
               {
-                message: 'Block comment "不正なブロックコメント" does not match any of the user-defined block rules.',
+                message: getInvalidMessage("Block", trimCommentPrefix(customInvalidBlockComment)),
                 line: 1,
                 column: 1,
               },
@@ -124,32 +141,34 @@ describe("code-comments-rule", () => {
     });
   
     it("カスタム lineIgnoreRules が適用される", () => {
+      const customIgnoreRule = "^SKIP:"
+      const ignoreValidComment = "// SKIP: このコメントは無視される";
+      const ignoreInvalidComment = "// MISSING: このコメントはエラー";
+
       ruleTester.run("comment-prefix", rule, {
         valid: [
           {
-            code: "// SKIP: このコメントは無視される",
+            code: ignoreValidComment,
             filename: "ignore-file.js",
             options: [
               {
-                lineRules: ["^TODO\\[[A-Z]{3}-\\d+\\]:"], // 有効なルール
-                lineIgnoreRules: ["^SKIP:"], // 無視するコメント
+                lineIgnoreRules: [customIgnoreRule],
               },
             ],
           },
         ],
         invalid: [
           {
-            code: "// MISSING: このコメントはエラー",
+            code: ignoreInvalidComment,
             filename: "ignore-file.js",
             options: [
               {
-                lineRules: ["^TODO\\[[A-Z]{3}-\\d+\\]:"], // 有効なルール
-                lineIgnoreRules: ["^SKIP:"], // 無視するコメント
+                lineIgnoreRules: [customIgnoreRule],
               },
             ],
             errors: [
               {
-                message: 'Line comment "MISSING: このコメントはエラー" does not match any of the user-defined line rules.',
+                message: getInvalidMessage("Line", trimCommentPrefix(ignoreInvalidComment)),
                 line: 1,
                 column: 1,
               },
@@ -158,12 +177,14 @@ describe("code-comments-rule", () => {
         ],
       });
     });
-  
     it("ファイルパスが include/exclude ルールに従う", () => {
+      const excludedComment = "// TODO[PROJ-123]: このファイルはルール違反でもエラーにならない";
+      const includedComment = "// TODO: このファイルはルールに従うためエラーになる";
+
       ruleTester.run("comment-prefix", rule, {
         valid: [
           {
-            code: "// TODO[PROJ-123]: このファイルはルール違反でもエラーにならない",
+            code: excludedComment,
             filename: "excluded-file.js",
             options: [
               {
@@ -174,7 +195,7 @@ describe("code-comments-rule", () => {
         ],
         invalid: [
           {
-            code: "// TODO: このファイルはルールに従う",
+            code: includedComment,
             filename: "included-file.js",
             options: [
               {
@@ -183,7 +204,7 @@ describe("code-comments-rule", () => {
             ],
             errors: [
               {
-                message: 'Line comment "TODO: このファイルはルールに従う" does not match any of the user-defined line rules.',
+                message: getInvalidMessage("Line", trimCommentPrefix(includedComment)),
                 line: 1,
                 column: 1,
               },
@@ -192,5 +213,5 @@ describe("code-comments-rule", () => {
         ],
       });
     });
-  });  
+  });
 });

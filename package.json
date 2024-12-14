@@ -20,7 +20,7 @@
     "url": "https://github.com/hmochizuki/eslint-plugin-comment-prefix-rules.git"
   },
   "author": "hi_mochy",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",

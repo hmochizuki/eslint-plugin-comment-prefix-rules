@@ -22,6 +22,12 @@ const tsCommentPatterns = [
   /^ts-expect-error/,
 ];
 
+const biomeCommentPatterns = [
+  /^@biome-ignore$/,
+  /^@biome-disable$/,
+  /^@biome-disable-next-line$/,
+];
+
 const rule: Rule.RuleModule = {
   meta: {
     type: "layout",
@@ -66,6 +72,7 @@ const rule: Rule.RuleModule = {
           const commentValue = comment.value.trim();
           if (eslintCommentPatters.some((regex) => regex.test(commentValue))) return;
           if (tsCommentPatterns.some((regex) => regex.test(commentValue))) return;
+          if (biomeCommentPatterns.some((regex) => regex.test(commentValue))) return;
 
           if (comment.type === "Line") {
             const isValid = lineRegexes.some((regex) => regex.test(commentValue));

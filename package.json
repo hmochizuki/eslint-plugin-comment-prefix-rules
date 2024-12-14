@@ -15,6 +15,10 @@
     "eslint-comment",
     "eslint-rule-comment"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmochizuki/eslint-plugin-comment-prefix-rules.git"
+  },
   "author": "hi_mochy",
   "license": "ISC",
   "scripts": {

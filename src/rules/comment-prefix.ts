@@ -38,7 +38,6 @@ const defaultOptions: Options = {
   blockIgnorePatterns: [],
 };
 
-
 const rule: Rule.RuleModule = {
   meta: {
     type: "layout",
@@ -56,7 +55,22 @@ const rule: Rule.RuleModule = {
             items: { type: "string" },
             minItems: 1
           },
+          lineIgnoreRules: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1
+          },
           blockRules: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1
+          },
+          blockIgnoreRules: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1
+          },
+          blockIgnorePatterns: {
             type: "array",
             items: { type: "string" },
             minItems: 1

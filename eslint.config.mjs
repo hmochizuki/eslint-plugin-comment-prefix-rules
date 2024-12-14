@@ -1,4 +1,4 @@
-import customPlugin from "./dist/index.js"; // コンパイル後のファイルを読み込む
+import customPlugin from "./dist/index.js";
 
 export default [
   {

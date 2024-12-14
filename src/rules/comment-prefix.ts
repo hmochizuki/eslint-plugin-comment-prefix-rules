@@ -22,8 +22,18 @@ const biomeCommentPatterns = [
   /^@biome-disable-next-line$/,
 ];
 
+const defaultLineRules = [
+  "^NOTE:",
+  "^MEMO:",
+  "^WIP:",
+  "^HACK:",
+  "^XXX:",
+  "^TODO\[PROJ-\d+\]:",
+  "^FIXME\[BUG-\d+\]:",
+];
+
 const defaultOptions: Options = {
-  lineRules: ["^TODO\\[PROJ-\\d+\\]:", "^FIXME\\[BUG-\\d+\\]:"],
+  lineRules: defaultLineRules,
   lineIgnorePatterns: [],
   blockRules: [],
   blockIgnorePatterns: [],

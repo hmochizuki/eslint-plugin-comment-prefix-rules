@@ -6,5 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.rules = void 0;
 const comment_prefix_1 = __importDefault(require("./rules/comment-prefix"));
 exports.rules = {
-    "comment-prefix": comment_prefix_1.default
+    "code-comments-rule": comment_prefix_1.default
 };

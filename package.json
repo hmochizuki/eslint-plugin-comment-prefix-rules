@@ -1,5 +1,5 @@
 {
-  "name": "eslint-comments-rule",
+  "name": "eslint-code-comments-rule",
   "version": "0.0.1",
   "description": "Custom eslint rules for enforce code comments",
   "main": "dist/index.js",
@@ -28,7 +28,7 @@
   "eslintConfig": {
     "plugins": ["custom"],
     "rules": {
-      "comment-prefix": "error"
+      "code-comments-rule": "error"
     }
   }
 }

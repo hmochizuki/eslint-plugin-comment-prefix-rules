@@ -113,23 +113,19 @@ const rule: Rule.RuleModule = {
           if (comment.type === "Line") {
             if(lineRegexes.length === 0) return;
             if(lineIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
-            const isValid = lineRegexes.some((regex) => regex.test(commentValue));
-            if (!isValid) {
-              context.report({
-                loc: comment.loc,
-                message: `Line comment "${commentValue}" does not match any of the user-defined line rules.`
-              });
-            }
+            if(lineRegexes.some((regex) => regex.test(commentValue))) return;
+            context.report({
+              loc: comment.loc,
+              message: `Line comment "${commentValue}" does not match any of the user-defined line rules.`
+            });
           } else if (comment.type === "Block") {
             if(blockRegexes.length === 0) return;
             if(blockIgnoreRegexes.some((regex) => regex.test(commentValue))) return;
-            const isValid = blockRegexes.some((regex) => regex.test(commentValue));
-            if (!isValid) {
-              context.report({
-                loc: comment.loc,
-                message: `Block comment "${commentValue}" does not match any of the user-defined block rules.`
-              });
-            }
+            if(blockRegexes.some((regex) => regex.test(commentValue))) return;
+            context.report({
+              loc: comment.loc,
+              message: `Block comment "${commentValue}" does not match any of the user-defined block rules.`
+            });
           }
         });
       }

@@ -1,4 +1,5 @@
 import { Rule } from "eslint";
+import micromatch from "micromatch";
 
 const eslintCommentRules = [
   /^eslint-disable/,
@@ -30,6 +31,8 @@ const defaultOptions = {
   lineIgnoreRules: [],
   blockRules: [],
   blockIgnoreRules: [],
+  include: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.mjsx"],
+  exclude: ["node_modules/**", "dist/**"],
 };
 type Options = typeof defaultOptions;
 
@@ -50,6 +53,16 @@ const properties = {
     minItems: 1
   },
   blockIgnoreRules: {
+    type: "array",
+    items: { type: "string" },
+    minItems: 1
+  },
+  include: {
+    type: "array",
+    items: { type: "string" },
+    minItems: 1
+  },
+  exclude: {
     type: "array",
     items: { type: "string" },
     minItems: 1
@@ -75,6 +88,11 @@ const rule: Rule.RuleModule = {
 
   create(context) {
     const options: Options = { ...defaultOptions, ...(context.options[0] || {}) };
+
+    const filePath = context.physicalFilename;
+    const isIncluded = micromatch.isMatch(filePath, options.include || []);
+    const isExcluded = micromatch.isMatch(filePath, options.exclude || []);
+    if (!isIncluded || isExcluded) return {};
     
     const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
     const lineIgnoreRegexes = options.lineIgnoreRules.map((rule) => new RegExp(rule));

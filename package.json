@@ -1,16 +1,19 @@
 {
   "name": "eslint-commnets-rule",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "Custom eslint rules for enforce code comments",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "keywords": ["eslint", "eslint-plugin", "eslint-rule", "eslint-comment", "eslint-rule-comment"],
+  "author": "hi_mochy",
+  "license": "ISC",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/eslint": "^9.6.1",
     "@types/micromatch": "^4.0.9",
@@ -21,5 +24,11 @@
   },
   "dependencies": {
     "micromatch": "^4.0.8"
+  },
+  "eslintConfig": {
+    "plugins": ["custom"],
+    "rules": {
+      "comment-prefix": "error"
+    }
   }
 }

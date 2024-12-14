@@ -1,5 +1,5 @@
 {
-  "name": "eslint-commnets-rule",
+  "name": "eslint-comments-rule",
   "version": "0.0.1",
   "description": "Custom eslint rules for enforce code comments",
   "main": "dist/index.js",

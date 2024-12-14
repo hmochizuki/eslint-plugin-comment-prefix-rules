@@ -5,3 +5,7 @@
 /*
   This is a valid block comment. (✅ OK)
 */
+
+// MEMO: eslint や ts のコメントは対象にしない
+// eslint-disable-next-line
+// ts-ignore

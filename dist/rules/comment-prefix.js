@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const micromatch_1 = __importDefault(require("micromatch"));
-const getInvalidMessage_1 = require("./getInvalidMessage");
+import micromatch from "micromatch";
+import { getInvalidMessage } from "./getInvalidMessage.js";
 const eslintCommentRules = [
     /^eslint-disable/,
     /^eslint-enable/,
@@ -88,8 +83,8 @@ const rule = {
     create(context) {
         const options = { ...defaultOptions, ...(context.options[0] || {}) };
         const filePath = context.physicalFilename;
-        const isIncluded = micromatch_1.default.isMatch(filePath, options.include || []);
-        const isExcluded = micromatch_1.default.isMatch(filePath, options.exclude || []);
+        const isIncluded = micromatch.isMatch(filePath, options.include || []);
+        const isExcluded = micromatch.isMatch(filePath, options.exclude || []);
         if (!isIncluded || isExcluded)
             return {};
         const lineRegexes = options.lineRules.map((rule) => new RegExp(rule));
@@ -119,7 +114,7 @@ const rule = {
                             return;
                         context.report({
                             loc: comment.loc,
-                            message: (0, getInvalidMessage_1.getInvalidMessage)(comment.type, commentValue)
+                            message: getInvalidMessage(comment.type, commentValue)
                         });
                     }
                     else if (comment.type === "Block") {
@@ -131,7 +126,7 @@ const rule = {
                             return;
                         context.report({
                             loc: comment.loc,
-                            message: (0, getInvalidMessage_1.getInvalidMessage)(comment.type, commentValue)
+                            message: getInvalidMessage(comment.type, commentValue)
                         });
                     }
                 });
@@ -139,4 +134,4 @@ const rule = {
         };
     }
 };
-exports.default = rule;
+export default rule;

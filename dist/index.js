@@ -1,10 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+import codeCommentRule from "./rules/comment-prefix.js";
+// 名前付きエクスポート
+export const rules = {
+    "code-comments-rule": codeCommentRule,
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.rules = void 0;
-const comment_prefix_1 = __importDefault(require("./rules/comment-prefix"));
-exports.rules = {
-    "code-comments-rule": comment_prefix_1.default
+// デフォルトエクスポート
+export default {
+    rules,
 };

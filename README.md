@@ -19,15 +19,15 @@ yarn add eslint-plugin-comment-prefix-rules --save-dev
 ESLintの設定にプラグインを追加
 
 ```javascript
-import commentPrefixRule from "eslint-code-comments-rule";
+import codeCommentsRule from "eslint-code-comments-rule";
 
 export default [
   {
     plugins: {
-      "eslint-code-comments-rule": commentPrefixRule,
+      "eslint-code-comments-rule": codeCommentsRule,
     },
     rules: {
-      "eslint-code-comments-rule/comment-prefix": "error",
+      "eslint-code-comments-rule/code-comments-rule": "error",
     },
   },
 ];
@@ -64,7 +64,7 @@ export default [
 ### カスタマイズ例
 ```javascript
 rules: {
-  "eslint-code-comments-rule/comment-prefix": [
+  "eslint-code-comments-rule/code-comments-rule": [
     "error",
     {
       lineRules: ["^CUSTOM\\[[A-Z]{3}-\\d+\\]:"], // ラインコメントの許容ルール(正規表現)

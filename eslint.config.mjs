@@ -7,9 +7,7 @@ export default [
       custom: customPlugin,
     },
     rules: {
-      "custom/comment-prefix": [
-        "error",
-      ],
+      "custom/code-comments-rule": ["error"],
     },
   },
 ];

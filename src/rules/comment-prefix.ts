@@ -1,6 +1,6 @@
 import { Rule } from "eslint";
 import micromatch from "micromatch";
-import { getInvalidMessage } from "./getInvalidMessage";
+import { getInvalidMessage } from "./getInvalidMessage.js";
 
 const eslintCommentRules = [
   /^eslint-disable/,

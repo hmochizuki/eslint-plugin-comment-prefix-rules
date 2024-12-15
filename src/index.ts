@@ -1,5 +1,9 @@
-import codeCommentRule from "./rules/comment-prefix";
+import codeCommentRule from "./rules/comment-prefix.js";
 
 export const rules = {
-  "code-comments-rule": codeCommentRule
+  "code-comments-rule": codeCommentRule,
+};
+
+export default {
+  rules,
 };
